@@ -34,8 +34,8 @@ input_values = [(quality,q),(position,p)]
 #   and use 'Mamdani' or 'Larsen' for agregation method
 #############################
 
-ouput_mam = system.run_sid(input_values,'centroid','Mamdani')
-ouput_lars = system.run_sid(input_values, 'centroid','Larsen')
+ouput_mam = system.run_sid_mamdani(input_values,'centroid')
+ouput_lars = system.run_sid_larsen(input_values, 'centroid')
 
 print(f'La asistencia esperada es de {ouput_mam}% en Mamdani')
 print(f'La asistencia esperada es de {ouput_lars}% en Larsen')

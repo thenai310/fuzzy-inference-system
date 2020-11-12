@@ -25,9 +25,9 @@ class FuzzySystem:
         rule = FuzzyRule(ant,cons,op)
         self.rules.append(rule)
 
-    def run_sid(self,input_values,method,add_m):
+    def run_sid_mamdani(self,input_values,method):
         """
-        Correr el sistema de inferencia difusa
+        Correr el sistema de inferencia difusa(metodo Mamdani)
 
         Params:
         --------
@@ -35,9 +35,6 @@ class FuzzySystem:
 
             method: string, nombre del metodo de desfusificacion:
                     * centroid * bisector * lom * mom * som
-            add_m: string nombre del metodo de agregacion:
-                    * mamdani * larsen
-
         Returns:
         ---------
             value: evaluacion del metodo en el conjunto
@@ -45,10 +42,7 @@ class FuzzySystem:
         """
         set_list = []
         for rule in self.rules:
-            if add_m.lower == 'mamdani':
-                set_list.append(rule.evaluate_rule(input_values))
-            else:
-                set_list.append(rule.evaluate_rule(input_values,False))
+            set_list.append(rule.evaluate_rule(input_values))
 
         initial_set = set_list.pop(0)
         for _set in set_list:
@@ -56,4 +50,29 @@ class FuzzySystem:
 
         return eval(f'initial_set.{method.lower()}()')
 
+    def run_sid_larsen(self,input_values,method):
+        """
+        Correr el sistema de inferencia difusa(metodo Larsen)
+
+        Params:
+        --------
+            input_values: lista de valores de entrada 
+                        (tupla variable-valor)
+
+            method: string, nombre del metodo de desdifusificacion:
+                    * centroid * bisector * lom * mom * som
+        Returns:
+        ---------
+            value: evaluacion del metodo en el conjunto
+                   resultante de la agregacion  
+        """
+        set_list = []
+        for rule in self.rules:
+            set_list.append(rule.evaluate_larsen(input_values))
+
+        initial_set = set_list.pop(0)
+        for _set in set_list:
+            initial_set = initial_set.union(_set)
+
+        return eval(f'initial_set.{method.lower()}()')
     
